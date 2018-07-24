@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{% url 'login:register' %}" method="post">
+    {% csrf_token %}
+    用户名：<input type="text" name="r_user_name" id="r_user_name">
+    <br>
+    密码：<input type="password" name="r_password" id="r_password">
+    <br>
+    请再次输入密码：<input type="password" name="r_password_2" id="r_r_password">
+    <button type="submit">提交</button>
+</form>
+</body>
+</html>

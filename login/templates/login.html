@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{% url 'login:welcome' %}" method="post" >
+    {% csrf_token %}
+    用户名：<input type="text" name="user_name" id="user_name">
+    <br>
+    密码：<input type="password" name="password" id="password">
+    <button type="submit">提交</button>
+</form>
+<a href="{% url 'login:register' %}">注册</a>
+<a href="{% url 'login:logout' %}">注销</a>
+</body>
+</html>

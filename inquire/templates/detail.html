@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微分析 速卖通商品流量词入口查询系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+    html {
+        overflow-y: scroll;
+    }
+
+    :root {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    :root body {
+        position: absolute;
+    }
+
+    body {
+        width: 100vw;
+        overflow: hidden;
+        text-align: center;
+    }
+</style>
+<body style="padding:50px">
+<a href="{% url 'login:login' %}" type="button">登陆</a>
+<a href="{% url 'login:logout' %}" type="button">注销</a>
+<a href="{% url 'login:register' %}" type="button">注册</a>
+        <div class="container">
+            <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+        <form class="form-inline my-2 ml-sm-5 my-lg-0" method="POST" action="{% url 'inquire:Getdata' %}" id="urlForm">
+            {% csrf_token %}
+            <textarea style="width:670px;height:190px" form="urlForm" name="id" class="form-control text-muted" >https://www.aliexpress.com/item/New-Running-Sports-Woman-Leggings-Gym-Clothing-Fitness-Tight-Yoga-Pants/32668351168.html</textarea>
+            <button class="btn btn-outline-success mx-2 my-sm-0" type="submit">Search</button>
+
+        </form>
+            </div>
+            <div class="col-md-1"></div>
+            </div>
+        </div>
+<br>
+{%  load static %}
+{% if not results %}
+<div class="alert alert-primary" role="alert">
+  <p>您正在使用的是免费版的速卖通商品流量词入口查询系统，仅开放了女装、手机配件、流行珠宝等二级类目</p>
+    <p>如您想获取所在行业的流量词数据，欢迎联系我们的客服qq:3325883794 或加入我们的官方q群:538014809</p>
+    <p>扫描下方二维码关注我们的公众号：微分析，更多行业数据分析报告持续分析</p>
+    <img src="../static/inquire/qr_code.jpg" alt="" width="190px" height="190px">
+</div>
+{% endif %}
+<div role="main" class="container">
+    <div class="row my-2">
+        <div class="col-md-2">
+            {% if results.0.price %}
+            <img src="https://{{ results.0.picsrc }}" alt="" class="img-thumbnail" width="120" height="120">
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-10">
+                    <a href="https://www.aliexpress.com/wholesale?initiative_id=SB_20180412174003&site=glo&g=y&SearchText={{ results.0.urlid }}" title="{{ results.0.title }}" target="view_window"><p style="text-align:left">{{ results.0.title }}</p></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p style="text-align:left">目前价格: {{ results.0.price }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if results %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>产品ID</th>
+            <th>关键词</th>
+            <th>出现页数</th>
+            <th>出现位置</th>
+            <th>更新时间</th>
+        </tr>
+        </thead>
+        {% endif %}
+        <tbody>
+        {% for keyword in results %}
+            <tr>
+                <td>{{ keyword.urlid }}</td>
+                <td>{{ keyword.keyword }}</td>
+                <td>{{ keyword.page }}</td>
+                <td>{{ keyword.rank }}</td>
+                <td>{{ keyword.updatatime | date:"Y-m-d" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    {% if results %}
+    <p class="alert alert-dark"><span class="text-danger">免费版</span>仅显示排名在<span class="text-danger">前五页</span>的商品数据哦</p>
+        <p class="text-info">想查看更多商品关键词数据，欢迎联系我们的客服qq:3325883794 或加入我们的官方q群:538014809 进行咨询</p>
+        <p>扫码关注我们的公众号，获取更多速卖通行业数据分析报告资料</p>
+        <img src="{% static 'inquire/qr_code.jpg' %}" alt="" width="200" height="200">
+    {% endif %}
+    <br>
+    <p class="text-warning text-center">{{ wrong_url }}</p>
+    <p class="text-danger text-center">{{ no_result }}</p>
+
+
+</div><!-- /.container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
